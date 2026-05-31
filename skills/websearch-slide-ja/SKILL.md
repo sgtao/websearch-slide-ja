@@ -1,5 +1,5 @@
 ---
-name: slide-generator
+name: websearch-slide-ja
 description: >
   GitHubやX（Twitter）などのネット上の公開情報（人気Skill、使い方Tips、技術トレンド等）を
   Web検索で収集し、スライド形式のHTMLページとして生成するスキル。
