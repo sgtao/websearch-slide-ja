@@ -36,6 +36,7 @@ GitHubやX（Twitter）等のネット上の情報を調査・収集し、スラ
 | `assets/base-template.html` | Step 4 の開始時に必ずコピーして土台にする |
 | `assets/styles/*.css` | テンプレートに埋め込むCSS群（theme-vars / slide-core / nav-controls / **figure** / list-view の順で統合・全5ファイル） |
 | `assets/scripts/*.js` | テンプレートに埋め込むJS群（fit-slide / theme-toggle / view-toggle / navigation の順で統合） |
+| `assets/fallback-image.html` | Step 4 で画像を埋め込む場合、`<script>` に `createFallback()` をコピーする |
 ---
 ## Step 1-A: 情報ソース確認
 `references/source-selection.md` を参照し、以下の手順で情報ソースを確定する。
@@ -178,21 +179,22 @@ Slide 3 : まとめ（結論 ＋ 参考リンクを融合）
 1. `assets/base-template.html` をコピーして土台にする
 2. `assets/styles/` の5ファイルを `<style>` に統合する（theme-vars → slide-core → nav-controls → figure → list-view の順）
 3. `references/slide-layouts.md` を参照しながら、各スライドのHTMLを `<section class="slide">` で記述する
-3-a. **画像埋め込み（Web 検索モード時のみ）**
+4. **画像埋め込み（Web 検索モード時のみ）** — `references/image-embedding.md` と `assets/fallback-image.html` を参照
 
     `references/image-embedding.md` の判断フローを実行する。
 
     ```
-    Step 2 で収集した画像候補を確認
+    Step 2 の「[画像収集リスト]」を確認
     ↓
     各候補について image-embedding.md の 1〜4 を順に判定
     ↓
     OK → <figure class="slide-figure"> で埋め込む
-    NG → テキストリンクのみにする
+    NG / なし → 画像埋め込みをスキップ（テキストのみ）
     ```
 
-    埋め込む場合、`assets/fallback-image.html` の `createFallback()` を
-    `<script>` ブロックに含め、全 `<img>` の `onerror` に設定する。
+    埋め込む画像が1件でもある場合、`assets/fallback-image.html` を開いて
+    `createFallback()` 関数を `<script>` ブロックの先頭にコピーする（必須）。
+    全 `<img>` の `onerror` 属性にこの関数を設定する。
 
     HTMLパターン例:
     ```html
@@ -207,7 +209,7 @@ Slide 3 : まとめ（結論 ＋ 参考リンクを融合）
       </figcaption>
     </figure>
     ```
-4. `assets/scripts/` の4ファイルを `<script>` に統合する（fit-slide → theme-toggle → view-toggle → navigation の順）
+5. `assets/scripts/` の4ファイルを `<script>` に統合する（fit-slide → theme-toggle → view-toggle → navigation の順）
 ### 機能チェック
 生成後に以下が実装されていることを確認する。
 | 機能 | 実装方法 |
