@@ -34,7 +34,7 @@ GitHubやX（Twitter）等のネット上の情報を調査・収集し、スラ
 | `references/slide-layouts.md` | Step 3 でスライド構成を決めるとき、Step 4 で各スライドを書くとき |
 | `references/design-tokens.md` | Step 4 でCSS変数（色・フォント）を埋め込むとき |
 | `assets/base-template.html` | Step 4 の開始時に必ずコピーして土台にする |
-| `assets/styles/*.css` | テンプレートに埋め込むCSS群（theme-vars / slide-core / nav-controls / list-view の順で統合） |
+| `assets/styles/*.css` | テンプレートに埋め込むCSS群（theme-vars / slide-core / nav-controls / **figure** / list-view の順で統合・全5ファイル） |
 | `assets/scripts/*.js` | テンプレートに埋め込むJS群（fit-slide / theme-toggle / view-toggle / navigation の順で統合） |
 ---
 ## Step 1-A: 情報ソース確認
@@ -134,6 +134,12 @@ GitHubやX（Twitter）等のネット上の情報を調査・収集し、スラ
 - 1スライドにつき **最大 1 件** を目安に候補を絞る
 - 取得元ページの URL（出典 URL）を画像 URL とセットで記録する
 - 判断基準を満たさない URL は記録しない
+- 収集結果を以下の形式でまとめる（0件の場合も「なし」と明記する）：
+  ```
+  [画像収集リスト]
+  スライド N: 画像URL https://... / 出典ページ https://... / 説明「〇〇のスクリーンショット」
+  スライド M: なし（適切なURLが見つからなかったため）
+  ```
 
 > **会話のみモード（3枚ミニ含む）の場合は画像収集をスキップする。**
 ---
