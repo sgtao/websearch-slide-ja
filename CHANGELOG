@@ -3,6 +3,54 @@
 このスキルの変更履歴です。バージョンは [Semantic Versioning](https://semver.org/) に準拠。
 
 ---
+## [v0.4.0] - 2026-06-06
+
+### 追加｜出力検証スクリプト・品質改善
+
+- **`scripts/validate-output.sh`（8カテゴリの品質チェック）**
+  - HTML構文 / スライド枚数（3〜12枚） / 必須HTML要素（10項目） / 必須JS関数（15関数） / 出典リンク / CSS・JSリーク検出 / プレースホルダ残留（25種類） / 禁止ライブラリ（`<canvas>`・Chart.js等）
+  - Python3 による `<style>` / `<script>` / `<svg>` 外の可視テキスト抽出で高精度リーク検出。Python3 未インストール環境は sed でフォールバック
+  - html-validate（npx）による構文チェック。未インストール環境は基本タグ存在確認にフォールバック
+  - `bash scripts/validate-output.sh <file.html>` で即実行。exit 0 = PASS / exit 1 = FAIL
+- **`references/output-validation.md`**（検証フローの詳細ドキュメント）
+  - 実行結果例（ALL PASS時の全出力）、チェック項目一覧、CSS/JSリーク検出パターン一覧、統合テスト手順（T5-A〜T5-H）、リリース手順（git tag）を収録
+- **`.slide-fit` クラス**（10行超テーブル・20項目超一覧のはみ出し対策）
+  - `<section class="slide slide-fit">` を付与するだけの opt-in 設計
+  - list モード時: `height: fit-content` でコンテンツ全体を表示
+  - hero モード: 960×540px 固定を維持（`slide-core.css` は変更なし）
+  - 印刷時: `height: auto` + `page-break-inside: auto` でページ跨ぎを許容
+- **`references/slide-layouts.md` に「一覧テーブルスライド」セクション追加**
+  - `slide-fit` の使い方・HTML実装例・モード別動作表・使用判断の目安を追記
+- **クオリティチェックリスト H 節**（コンテンツ漏洩チェック）追加
+  - `[data-theme="dark"]` / `:root {` 等の CSS 定義テキスト漏洩、JS 断片漏洩、未置換プレースホルダの確認項目
+- **クオリティチェックリスト I 節**（オーバーフロー対策）追加
+  - `slide-fit` の付与漏れ・誤付与の確認項目
+- **Step 0: スキル起動時の作成確認**
+  - スキル呼び出し直後に `ask_user_input_v0` で「HTMLベースのスライド資料を作成しますか？」を2択確認
+  - 「いいえ、やめる」を選択するとその時点で処理を終了（検索・生成は一切行わない）
+
+### 変更
+
+- **Step 5 を `5-A. ファイル出力` と `5-B. 品質検証` に分割**
+  - 旧: FAIL があれば自動修正して再生成
+  - 新: FAIL 項目を整理してユーザーに提示 → `ask_user_input_v0` で「修正しますか？」を2択確認 → Yes のみ修正・再生成・再検証。No の場合は「了解しました。」と回答してファイルを返す（提示済みなら回答のみ）
+- **クオリティチェックリスト A 節に Step 0 の確認項目を追加**
+
+### ファイル構成の変更
+
+```
+追加:
+  scripts/validate-output.sh
+  references/output-validation.md
+
+変更:
+  assets/styles/list-view.css     （slide-fit ルール追加: list モードで高さ可変）
+  assets/styles/print.css         （slide-fit ルール追加: 印刷時の高さ可変・ページ跨ぎ許容）
+  references/slide-layouts.md     （一覧テーブルスライドのレイアウト定義を追加）
+  SKILL.md                        （Step 0 追加 / Step 5 分割・修正確認フロー / チェックリスト H・I 追加 / 参照ファイルガイド更新）
+```
+
+---
 ## [v0.3.0] - 2026-06-03
 
 ### 追加｜PDF / PNG / ZIP エクスポート機能
